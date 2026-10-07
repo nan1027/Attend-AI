@@ -6,16 +6,10 @@
 
 <p align="center">
   <a href="https://attend-ai-rshe.onrender.com">
-    <img src="https://img.shields.io/badge/Live%20Demo-AttendAI-orange?style=for-the-badge" alt="Live Demo">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-AttendAI-orange?style=for-the-badge" alt="Live Demo">
   </a>
   <a href="https://github.com/nan1027/Attend-AI">
-    <img src="https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github" alt="GitHub Repository">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://attend-ai-rshe.onrender.com">
-    <strong>🚀 Launch Live Demo →</strong>
+    <img src="https://img.shields.io/badge/💻%20GitHub-AttendAI-black?style=for-the-badge" alt="GitHub">
   </a>
 </p>
 
