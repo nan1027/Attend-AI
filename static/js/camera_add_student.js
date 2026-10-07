@@ -1,9 +1,9 @@
-// camera_add_student.js
 const saveInfoBtn = document.getElementById("saveInfoBtn");
 const startCaptureBtn = document.getElementById("startCaptureBtn");
 const addStudentBtn = document.getElementById("addStudentBtn");
 const video = document.getElementById("video");
 const captureStatus = document.getElementById("captureStatus");
+const capturePercent = document.getElementById("capturePercent");
 const progressBar = document.getElementById("progressBar");
 
 let student_id = null;
@@ -15,15 +15,18 @@ let stream = null;
 document.getElementById("studentForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const fd = new FormData(e.target);
-  const res = await fetch("/add_student", { method: "POST", body: fd });
-  if (!res.ok) {
-    alert("Failed to save student info");
-    return;
+  try {
+    saveInfoBtn.disabled = true;
+    const res = await fetch("/add_student", { method: "POST", body: fd });
+    if (!res.ok) throw new Error("Failed to save student information.");
+    const j = await res.json();
+    student_id = j.student_id;
+    captureStatus.textContent = "Details saved. Start the camera when ready.";
+    startCaptureBtn.disabled = false;
+  } catch (err) {
+    alert(err.message);
+    saveInfoBtn.disabled = false;
   }
-  const j = await res.json();
-  student_id = j.student_id;
-  alert("Student info saved. Click Start Capture to open the camera.");
-  startCaptureBtn.disabled = false;
 });
 
 startCaptureBtn.addEventListener("click", async () => {
@@ -47,32 +50,32 @@ async function captureImagesLoop() {
 
   while (captured < maxImages) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const blob = await new Promise(res => canvas.toBlob(res, "image/jpeg", 0.9));
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.9));
     images.push(blob);
     captured++;
-    captureStatus.innerText = `Captured ${captured} / ${maxImages}`;
-    progressBar.style.width = `${(captured / maxImages) * 100}%`;
-    // small visual flash
-    await new Promise(r => setTimeout(r, 200));
+    const pct = Math.round((captured / maxImages) * 100);
+    captureStatus.textContent = `Captured ${captured} / ${maxImages}`;
+    capturePercent.textContent = `${pct}%`;
+    progressBar.style.width = `${pct}%`;
+    await new Promise(resolve => setTimeout(resolve, 200));
   }
 
-  // upload all images in one request
   const form = new FormData();
   form.append("student_id", student_id);
-  images.forEach((b, i) => form.append("images[]", b, `img_${i}.jpg`));
-  const resp = await fetch("/upload_face", { method: "POST", body: form });
-  if (resp.ok) {
-    alert("Captured images uploaded");
+  images.forEach((blob, i) => form.append("images[]", blob, `img_${i}.jpg`));
+
+  try {
+    const resp = await fetch("/upload_face", { method: "POST", body: form });
+    if (!resp.ok) throw new Error("Upload failed.");
+    captureStatus.textContent = "Face samples uploaded successfully.";
     addStudentBtn.disabled = false;
-  } else {
-    alert("Upload failed");
+  } catch (err) {
+    alert(err.message);
   }
 
-  // stop camera
   if (stream) stream.getTracks().forEach(t => t.stop());
 }
 
 addStudentBtn.addEventListener("click", () => {
-  alert("Student record complete. Returning to dashboard.");
   window.location.href = "/";
 });

@@ -1,0 +1,13 @@
+@"
+.venv/
+__pycache__/
+*.pyc
+
+dataset/
+attendance.db
+model.pkl
+train_status.json
+
+.env
+.env.*
+"@ | Set-Content .gitignore

@@ -1,34 +1,526 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Mark Attendance</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AttendAI | Mark Attendance</title>
+
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
+
 <body>
-<div class="container my-4">
-  <div class="card p-4 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center">
-      <h4>Mark Attendance (Live)</h4>
-      <div>
-        <button id="startMarkBtn" class="btn btn-primary">Start</button>
-        <button id="stopMarkBtn" class="btn btn-danger" disabled>Stop</button>
+
+<div class="app-shell">
+
+
+  <!-- =====================================================
+       SIDEBAR
+  ====================================================== -->
+
+  <aside class="sidebar">
+
+    <div class="brand">
+
+      <div class="brand-mark">A</div>
+
+      <div class="brand-text">
+        <strong>AttendAI</strong>
+        <span>Smart Attendance</span>
       </div>
+
     </div>
 
-    <div class="row mt-3">
-      <div class="col-md-7 text-center">
-        <video id="markVideo" width="560" height="420" autoplay muted style="border-radius:10px;border:2px solid #e2e8f0;"></video>
-        <div id="markStatus" class="mt-2 small text-muted">Waiting...</div>
+
+    <nav class="side-nav">
+
+      <a href="/">
+        <span class="nav-number">01</span>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="/add_student">
+        <span class="nav-number">02</span>
+        <span>Add Student</span>
+      </a>
+
+      <a class="active" href="/mark_attendance">
+        <span class="nav-number">03</span>
+        <span>Mark Attendance</span>
+      </a>
+
+      <a href="/attendance_record">
+        <span class="nav-number">04</span>
+        <span>Attendance Records</span>
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+      <div class="status-dot"></div>
+
+      <div>
+        <strong>System online</strong>
+        <span>Live recognition</span>
       </div>
-      <div class="col-md-5">
-        <h6>Recognized (session)</h6>
-        <ul id="recognizedList" class="list-group"></ul>
-      </div>
+
     </div>
-  </div>
+
+  </aside>
+
+
+
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
+
+  <main class="main-content">
+
+
+    <!-- ===================================================
+         TOPBAR
+    ==================================================== -->
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <div class="mini-brand">
+          ATTENDAI
+        </div>
+
+        <div class="top-date">
+          LIVE RECOGNITION
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <div class="live-indicator">
+          <span></span>
+          CAMERA SYSTEM
+        </div>
+
+        <a class="secondary-btn"
+           href="/">
+          ← Dashboard
+        </a>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- ===================================================
+         PAGE INTRO
+    ==================================================== -->
+
+    <section class="page-intro recognition-intro">
+
+      <div>
+
+        <p class="eyebrow">
+          LIVE RECOGNITION / 03
+        </p>
+
+        <h1>
+          Mark
+          <span>attendance.</span>
+        </h1>
+
+        <p class="page-description">
+          Start the camera and let AttendAI identify registered
+          students automatically.
+        </p>
+
+      </div>
+
+
+      <div class="recognition-status">
+
+        <span class="recognition-status-dot"></span>
+
+        <div>
+          <strong>AI recognition</strong>
+          <small>Ready for detection</small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         RECOGNITION LAYOUT
+    ==================================================== -->
+
+    <div class="recognition-layout">
+
+
+      <!-- =================================================
+           CAMERA
+      ================================================== -->
+
+      <section class="panel camera-panel large-camera">
+
+        <div class="panel-number">
+          03
+        </div>
+
+
+        <div class="panel-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              CAMERA
+            </p>
+
+            <h2>
+              Recognition feed
+            </h2>
+
+          </div>
+
+
+          <span id="liveBadge"
+                class="badge">
+
+            Standby
+
+          </span>
+
+        </div>
+
+
+
+        <!-- CAMERA VIEW -->
+
+        <div class="recognition-camera-frame">
+
+          <video
+            id="markVideo"
+            autoplay
+            muted
+            playsinline>
+          </video>
+
+
+          <!-- Dark overlay -->
+
+          <div class="camera-shade"></div>
+
+
+          <!-- Corner brackets -->
+
+          <div class="camera-corner top-left"></div>
+          <div class="camera-corner top-right"></div>
+          <div class="camera-corner bottom-left"></div>
+          <div class="camera-corner bottom-right"></div>
+
+
+          <!-- Face scanning guide -->
+
+          <div class="recognition-guide">
+
+            <div class="recognition-oval"></div>
+
+          </div>
+
+
+          <!-- Animated scan line -->
+
+          <div class="scan-line"></div>
+
+
+          <!-- Camera information -->
+
+          <div class="camera-overlay-info">
+
+            <div class="camera-mode">
+              FACE RECOGNITION
+            </div>
+
+            <div class="camera-resolution">
+              LIVE
+            </div>
+
+          </div>
+
+
+          <!-- Bottom camera status -->
+
+          <div class="camera-live-status">
+
+            <span></span>
+
+            CAMERA FEED ACTIVE
+
+          </div>
+
+        </div>
+
+
+
+        <!-- CAMERA CONTROLS -->
+
+        <div class="camera-controls">
+
+          <button
+            id="startMarkBtn"
+            class="primary-btn">
+
+            <span>
+              Start recognition
+            </span>
+
+            <span>
+              →
+            </span>
+
+          </button>
+
+
+          <button
+            id="stopMarkBtn"
+            class="danger-btn"
+            disabled>
+
+            Stop
+
+          </button>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div id="markStatus"
+             class="status-message">
+
+          Waiting for camera...
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           RECOGNIZED STUDENTS
+      ================================================== -->
+
+      <section class="panel recognized-panel">
+
+        <div class="panel-number">
+          04
+        </div>
+
+
+        <div class="panel-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              SESSION
+            </p>
+
+            <h2>
+              Recognized
+            </h2>
+
+          </div>
+
+
+          <div class="session-count">
+            <span id="recognizedCount">0</span>
+            <small>present</small>
+          </div>
+
+        </div>
+
+
+
+        <!-- SESSION INFO -->
+
+        <div class="session-info">
+
+          <span class="session-live-dot"></span>
+
+          <div>
+            <strong>Live session</strong>
+            <small>Attendance is recorded automatically</small>
+          </div>
+
+        </div>
+
+
+
+        <!-- EMPTY STATE -->
+
+        <div id="recognizedEmpty"
+             class="empty-state">
+
+          <div class="empty-icon">
+            ◎
+          </div>
+
+          <strong>
+            No attendance yet
+          </strong>
+
+          <span>
+            Recognized students will appear here
+            during this session.
+          </span>
+
+        </div>
+
+
+
+        <!-- RECOGNIZED LIST -->
+
+        <ul id="recognizedList"
+            class="recognized-list">
+        </ul>
+
+
+
+        <!-- SESSION FOOTER -->
+
+        <div class="recognition-panel-footer">
+
+          <span>
+            ATTENDAI
+          </span>
+
+          <span>
+            AUTO RECORDING ENABLED
+          </span>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         HOW IT WORKS
+    ==================================================== -->
+
+    <section class="recognition-flow">
+
+      <div class="flow-item">
+
+        <span class="flow-number">
+          01
+        </span>
+
+        <div>
+          <strong>
+            Detect
+          </strong>
+
+          <small>
+            Camera detects a face
+          </small>
+        </div>
+
+      </div>
+
+
+      <div class="flow-arrow">
+        →
+      </div>
+
+
+      <div class="flow-item">
+
+        <span class="flow-number">
+          02
+        </span>
+
+        <div>
+          <strong>
+            Recognize
+          </strong>
+
+          <small>
+            AI compares registered samples
+          </small>
+        </div>
+
+      </div>
+
+
+      <div class="flow-arrow">
+        →
+      </div>
+
+
+      <div class="flow-item">
+
+        <span class="flow-number">
+          03
+        </span>
+
+        <div>
+          <strong>
+            Record
+          </strong>
+
+          <small>
+            Attendance is saved automatically
+          </small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         FOOTER
+    ==================================================== -->
+
+    <footer class="dashboard-footer">
+
+      <span>
+        ATTENDAI
+      </span>
+
+      <span>
+        AI-POWERED ATTENDANCE SYSTEM
+      </span>
+
+      <span>
+        2026
+      </span>
+
+    </footer>
+
+
+  </main>
+
 </div>
-<script src="{{ url_for('static', filename='js/camera_mark.js') }}"></script>
+
+
+
+<script src="{{ url_for('static',
+filename='js/camera_mark.js') }}">
+</script>
+
 </body>
 </html>
