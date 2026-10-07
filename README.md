@@ -1,105 +1,185 @@
-# 🤖 AttendAI — Smart Facial Recognition Attendance System
-
-### AI-Powered Attendance Management with Real-Time Face Recognition
-
-AttendAI is a full-stack facial recognition attendance system designed to automate student attendance using a webcam-based recognition pipeline.
-
-The system allows administrators to register students, capture face samples, train a recognition model, recognize students in real time, automatically record attendance, and review or export attendance history through a modern web interface.
+# 🎓 AttendAI — Smart Facial Recognition Attendance System
 
 <p align="center">
-  <a href="YOUR_RENDER_URL">
-    <img src="https://img.shields.io/badge/Live%20Demo-FF633F?style=for-the-badge&logo=render&logoColor=white" alt="Live Demo"/>
+  <strong>AI-powered attendance management using real-time facial recognition</strong>
+</p>
+
+<p align="center">
+  <a href="https://attend-ai-rshe.onrender.com">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-AttendAI-orange?style=for-the-badge" alt="Live Demo">
   </a>
   <a href="https://github.com/nan1027/Attend-AI">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
+    <img src="https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github" alt="GitHub Repository">
   </a>
 </p>
 
 ---
 
-## ✨ Features
+## 📌 Overview
 
-### 👨‍🎓 Student Registration
-- Register students with:
-  - Full name
-  - Roll number
-  - Registration number
-  - Class
-  - Section
-- Capture multiple face samples directly through the browser camera.
-- Prepare facial data for recognition.
+**AttendAI** is a web-based student attendance management system that uses **computer vision and machine learning** to recognize registered students and automatically record their attendance.
 
-### 📷 Real-Time Face Recognition
-- Browser-based webcam integration.
-- Real-time face detection using MediaPipe.
-- Facial image preprocessing before classification.
-- Machine-learning based student recognition.
-- Live recognition interface with visual scanning feedback.
+The application provides a complete workflow for:
 
-### 🟢 Automatic Attendance
-- Automatically records attendance when a registered student is recognized.
-- Prevents the need for manual attendance entry.
-- Displays recognized students during the current recognition session.
+- Registering students
+- Capturing facial samples through a browser camera
+- Training a facial recognition model
+- Recognizing students in real time
+- Automatically recording attendance
+- Viewing attendance history
+- Filtering attendance records
+- Downloading attendance data as CSV
 
-### 📊 Attendance Records
-- View complete attendance history.
-- Filter records by:
-  - All
-  - Today
-  - Last 7 days
-  - Last 30 days
-- View student ID, student name, timestamp and attendance status.
-- Export attendance records as CSV.
-
-### 🎨 Modern User Interface
-- Responsive dashboard.
-- Camera-focused recognition interface.
-- Clean editorial-style visual design.
-- Real-time system and camera status indicators.
-- Dedicated workflows for registration, recognition and attendance management.
+The project combines a **Flask backend**, **MediaPipe face detection**, **OpenCV image processing**, and a **Random Forest machine-learning classifier** with a modern responsive frontend.
 
 ---
 
-## 🧠 How It Works
+## 🚀 Live Demo
+
+### 👉 [Launch AttendAI](https://attend-ai-rshe.onrender.com)
+
+The application is deployed on **Render** using HTTPS, allowing browser-based camera access for face capture and real-time attendance recognition.
+
+> **Note:** The deployed application uses browser camera permissions. Allow camera access when prompted by the browser.
+
+---
+
+# ✨ Features
+
+### 👤 Student Registration
+
+Register students by entering:
+
+- Full Name
+- Roll Number
+- Registration Number
+- Class
+- Section
+
+The system then allows facial samples to be captured directly through the browser camera.
+
+---
+
+### 📸 Face Sample Capture
+
+The application uses the browser's camera to capture multiple facial samples for each registered student.
+
+The capture interface provides:
+
+- Live camera preview
+- Capture progress
+- Sample count
+- Registration completion status
+
+Multiple samples help provide more training data for the recognition model.
+
+---
+
+### 🧠 Real-Time Face Recognition
+
+AttendAI uses **MediaPipe** for face detection and **OpenCV** for image preprocessing.
+
+The detected face is processed before being passed to the machine-learning classifier.
+
+---
+
+### ✅ Automatic Attendance
+
+When a registered student is recognized:
+
+1. The student's identity is predicted.
+2. The recognition result is displayed.
+3. Attendance is automatically recorded.
+4. The timestamp is stored.
+
+---
+
+### 📊 Attendance Records
+
+The attendance dashboard provides:
+
+- Recognition history
+- Student name
+- Student ID
+- Timestamp
+- Attendance status
+- Date-based filtering
+- CSV export
+
+Available filters include:
+
+- All
+- Today
+- Last 7 Days
+- Last 30 Days
+
+---
+
+### 🎨 Modern User Interface
+
+AttendAI uses a custom responsive interface with:
+
+- Editorial-inspired visual design
+- Clean navigation
+- Dashboard overview
+- Dedicated camera interfaces
+- Recognition status indicators
+- Attendance analytics
+- Responsive layouts
+
+---
+
+# 🧠 System Architecture
 
 ```text
-                    ┌─────────────────────┐
-                    │       Student       │
-                    │     Registration    │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   Webcam Capture    │
-                    │   Face Samples      │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   MediaPipe Face    │
-                    │     Detection       │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Image Preprocessing │
-                    │ Crop → Gray → Resize│
-                    │     → Flatten       │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Random Forest       │
-                    │ Classifier          │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Student Recognition │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │ Attendance Record   │
-                    │     SQLite DB       │
-                    └─────────────────────┘
+                         👤 STUDENT
+                              │
+                              ▼
+                  ┌─────────────────────┐
+                  │  Student Registration│
+                  │                     │
+                  │ Name                │
+                  │ Roll Number         │
+                  │ Registration Number │
+                  │ Class / Section     │
+                  └──────────┬──────────┘
+                             │
+                             ▼
+                    📸 Face Capture
+                             │
+                             ▼
+                  ┌─────────────────────┐
+                  │ MediaPipe Face      │
+                  │ Detection           │
+                  └──────────┬──────────┘
+                             │
+                             ▼
+                    Face Preprocessing
+                             │
+                    ┌────────┴────────┐
+                    │                 │
+                    ▼                 ▼
+                Grayscale        Resize 32×32
+                    │                 │
+                    └────────┬────────┘
+                             │
+                             ▼
+                    Feature Vector
+                             │
+                             ▼
+                  🌲 Random Forest Model
+                             │
+                             ▼
+                     Face Prediction
+                             │
+                             ▼
+                  👤 Student Identified
+                             │
+                             ▼
+                     ✅ Attendance
+                             │
+                             ▼
+                    🗄️ SQLite Database
+                             │
+                             ▼
+                   📊 Attendance Records
